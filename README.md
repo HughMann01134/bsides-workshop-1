@@ -1,23 +1,30 @@
-# What is this project?
+# Workshop 1: Read The logs
 
-## Background and Motivation
-In 2026, I had the opportunity to teach my first practical malware analysis workshop at BSides Regina. It was an exciting experience and overall a success. However, reflecting on the session highlighted a few key areas for improvement.
-## Lessons Learned
-The first iteration of the workshop revealed a few bottlenecks and areas for growth:
-* **Information Overload:** The curriculum included too much information and tried to cover too many topics for a single session.
-* **Setup Friction:** While the initial setup went smoothly, having all attendees manually install VMware Workstation Pro and provision the various virtual machines took up way too much time.
-* **Manual Analysis Fatigue:** Attendees struggled a bit with manually scanning and parsing large log files.
-* **Narrative Structure:** A cohesive scenario or story is needed to help ground the workshop in the real world.
-* **Teaching vs. Showing:** The initial introduction could have been focused down to just the most relevant information.
-* **Student Discovery:** The workshop would have benefited from more hands-on assignments for the attendees to discover concepts on their own.
-* **Teaching Assistants:** Training up assistants beforehand would have helped manage and troubleshoot student issues more effectively.
-* **Hardwar Required:** The workshop utilized Windows OS which required a PC computer with enough memory and CPU. A more platform agnostic solution would be better. 
-## Project Goals
-This repository serves as a refactored approach to the workshop, starting with the basics of scanning log files. I'm redesigning the material and infrastructure to ensure a smoother learning experience. The core focus areas are:
-* **Streamlined Deployment:** Automating the lab environment setup to get attendees analyzing faster instead of fighting with installations.
-* **Focused Curriculum:** Narrowing the scope to core concepts to prevent information overload.
-* **Improved Tooling:** Integrating better automated processing to assist with log parsing and reduce manual fatigue.
-## Initial Directory Structues
+A hands-on cybersecurity workshop teaching log analysis though investigation of a simulated security incident.
+
+**Status:** In development. Target delivery: March 2027
+## What This Is
+
+A two-hour, in person workshop for up to 60 attendees. Students receive pre-captured log files from a compromised WordPress site (Apache logs, auth logs, Suricata alerts, Zeek logs) and investigate independently to reconstruct what happened. The workshop teaches log reading, hypothesis testing, and MITRE ATT&CK terminology though investigation and discovery.
+
+**Audience:** Beginner to intermediate. Some Linux familiarity is assumed, but no detection engineering background required.
+## Why This Project Exists
+
+This is a first in a planned series of workshops focused on making practical security skills accessible without expensive tools, complex setups, or specialized hardware. The designed emerged out of previous workshop and what I observed and feedback received about where the workshop succeeded and failed:
+
+- **Streamlined Deployment:** No VM installation, no local setup. Attendees open a browser, click a link, and get a working investigation enviroment.
+- **Focused Curriculum:** One scenario, one site of skills, one clean learning arc. Workshop 1 covers log analysis only. Later workshops in the serries will address other topics.
+- **Discovery over Lecture:** Attendees investigate independently and reconstruct the attack themselves. The instructors and teaching assistances guide the attendees but don't directly provide solutions.
+- **Platform-Agnostic:** Browser-based delivery means any laptop, and any OS can be used.
+
+## Architecture
+
+**Stack A - Log Generation Lab:** Runs in a controlled environment to produce realistic logs. Includes a vulnerable WordPress target, Suricata and Zeek sensors, MITRE Caldera as the attacker, and benign traffic simulator.
+
+**Stack B - Workshop Delivery:** Hosted in the cloud during the workshop. Provides browser-based terminal access (ttyd) for each attendee, with ngix reverse proxy and Cloudflare Tunnel for authentication and secure delivery.
+
+**Stack A** produces the logs in the lab and **Stack B** consumes then at workshop time.
+## Repository Layout
 
 ```
 bsides-workshop-1/
@@ -43,3 +50,29 @@ bsides-workshop-1/
 ├── scripts/                    # One-off ops scripts
 ├── docs/                       # Architecture decisions, runbooks
 ```
+## Following The Build
+
+I'm documenting this project publicly on Substack as a serries. Other workshop organizers should be able to clone the repo and run their own version.
+
+**Read Along:** [Hugh Mann's Substack](https://hmann.substack.com)
+
+## Status and roadmap
+
+- [x] Architecture decided
+- [x] Repository structure
+- [ ] Stack A: Vulnerable WordPress target
+- [ ] Stack A: Suricata and Zeek sensors
+- [ ] Stack A: Caldera adversary profile
+- [ ] Stack A: Benign traffic simulator
+- [ ] Stack A: Log capture and bundling pipeline
+- [ ] Stack B: Student container
+- [ ] Stack B: ngix reverse proxy
+- [ ] Stack B: Cloudflare Tunnel deployment
+- [ ] Content: Questions, Cheatsheet, TA briefing
+- [ ] First friendly test
+- [ ] Second test
+- [ ] Third test
+- [ ] Final delivery
+## License
+
+This project is licensed under the MIT License see the [LICENSE](LICENSE) file for details. Workshop content and code are free to use, adapt, and redeploy for your own workshop. Attribution appreciated but not required.
