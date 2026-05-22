@@ -20,6 +20,7 @@ This repository serves as a refactored approach to the workshop, starting with t
 * **Improved Tooling:** Integrating better automated processing to assist with log parsing and reduce manual fatigue.
 ## Initial Directory Structues
 
+```
 bsides-workshop-1/
 ├── stack-a/                    # Log generation lab
 │   ├── caldera/                # Adversary profiles, custom abilities
@@ -42,4 +43,4 @@ bsides-workshop-1/
 │   └── slides/
 ├── scripts/                    # One-off ops scripts
 ├── docs/                       # Architecture decisions, runbooks
-└── README.md
+```
