@@ -1,4 +1,4 @@
-# BSides Malware Analysis Lab Post-Mortem
+# What is this projedt?
 
 ## Background and Motivation
 In 2026, I had the opportunity to teach my first practical malware analysis workshop at BSides Regina. It was an exciting experience and overall a success. However, reflecting on the session highlighted a few key areas for improvement.
