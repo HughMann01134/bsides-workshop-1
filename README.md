@@ -18,8 +18,6 @@ This repository serves as a refactored approach to the workshop, starting with t
 * **Streamlined Deployment:** Automating the lab environment setup to get attendees analyzing faster instead of fighting with installations.
 * **Focused Curriculum:** Narrowing the scope to core concepts to prevent information overload.
 * **Improved Tooling:** Integrating better automated processing to assist with log parsing and reduce manual fatigue.
-
-
 ## Initial Directory Structues
 
 bsides-workshop-1/
