@@ -18,3 +18,30 @@ This repository serves as a refactored approach to the workshop, starting with t
 * **Streamlined Deployment:** Automating the lab environment setup to get attendees analyzing faster instead of fighting with installations.
 * **Focused Curriculum:** Narrowing the scope to core concepts to prevent information overload.
 * **Improved Tooling:** Integrating better automated processing to assist with log parsing and reduce manual fatigue.
+
+
+## Initial Directory Structues
+
+bsides-workshop-1/
+├── stack-a/                    # Log generation lab
+│   ├── caldera/                # Adversary profiles, custom abilities
+│   ├── target/                 # Vulnerable WordPress compose
+│   ├── sensors/                # Suricata, Zeek configs
+│   ├── benign-traffic/         # Legitimate user simulator
+│   └── pipeline/               # Capture, sanitize, bundle
+├── stack-b/                    # Workshop delivery
+│   ├── student-container/      # Dockerfile + content
+│   ├── nginx/                  # Reverse proxy config
+│   ├── cloudflare/             # Tunnel + Access config
+│   └── admin/                  # TA tooling
+├── bundles/                    # Versioned log bundles (gitignored, or LFS)
+│   └── v0.1.0/
+├── content/                    # Student/TA-facing materials
+│   ├── questions.md
+│   ├── cheatsheet.md
+│   ├── ta-briefing.md
+│   ├── answer-key.md
+│   └── slides/
+├── scripts/                    # One-off ops scripts
+├── docs/                       # Architecture decisions, runbooks
+└── README.md
