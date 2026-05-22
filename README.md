@@ -2,7 +2,6 @@
 
 ## Background and Motivation
 In 2026, I had the opportunity to teach my first practical malware analysis workshop at BSides Regina. It was an exciting experience and overall a success. However, reflecting on the session highlighted a few key areas for improvement.
-
 ## Lessons Learned
 The first iteration of the workshop revealed a few bottlenecks and areas for growth:
 * **Information Overload:** The curriculum included too much information and tried to cover too many topics for a single session.
