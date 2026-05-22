@@ -75,4 +75,4 @@ I'm documenting this project publicly on Substack as a serries. Other workshop o
 - [ ] Final delivery
 ## License
 
-This project is licensed under the MIT License see the [LICENSE](LICENSE) file for details. Workshop content and code are free to use, adapt, and redeploy for your own workshop. Attribution appreciated but not required.
+This project is licensed under the MIT License see the [LICENSE](LICENSE.md) file for details. Workshop content and code are free to use, adapt, and redeploy for your own workshop. Attribution appreciated but not required.
