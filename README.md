@@ -71,7 +71,6 @@ I'm documenting this project publicly on Substack as a series. Other workshop or
 - [x] Repository structure
 - [ ] Stack A: Vulnerable WordPress target
 - [ ] Stack A: Suricata and Zeek sensors
-- [ ] Stack A: Caldera adversary profile
 - [ ] Stack A: Benign traffic simulator
 - [ ] Stack A: Log capture and bundling pipeline
 - [ ] Stack B: Student container
