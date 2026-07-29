@@ -1,4 +1,3 @@
-version: "3.8"
 
 # Stack A — Vulnerable WordPress Target
 # Run this INSIDE the stackant VM (Ubuntu 22.04 Server, VMware Workstation Pro).
