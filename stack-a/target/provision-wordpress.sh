@@ -15,12 +15,22 @@ until wp db check --path=/var/www/html --allow-root 2>/dev/null; do
   sleep 3
 done
 
+# Internal address only — this is what the attacker script, benign traffic
+# simulator, and Suricata/Zeek will all see. Port 8080 is a host-only mapping
+# for convenient browser access from outside the VM; WordPress must NOT think
+# that's its canonical URL, or every internal request gets a 301 redirect
+# (which will corrupt exploit timing and log shapes later).
+INTERNAL_URL="http://172.28.0.10"
+
 if wp core is-installed --allow-root 2>/dev/null; then
   echo "[*] WordPress already installed, skipping core install."
+  echo "[*] Ensuring siteurl/home are set to the internal address..."
+  wp option update siteurl "${INTERNAL_URL}" --allow-root
+  wp option update home "${INTERNAL_URL}" --allow-root
 else
   echo "[*] Installing WordPress core (5.4)..."
   wp core install \
-    --url="http://172.28.0.10:8080" \
+    --url="${INTERNAL_URL}" \
     --title="Prairie Wares Co." \
     --admin_user=admin \
     --admin_password="Welcome2024!" \
@@ -37,7 +47,12 @@ if ! wp plugin is-installed wpdiscuz --allow-root 2>/dev/null; then
     wp plugin install /tmp/wpdiscuz-7.0.4.zip --allow-root
   fi
 fi
-wp plugin activate wpdiscuz --allow-root
+# --user=admin matters here: wpDiscuz's activation routine does its own
+# current_user_can() check rather than relying on WP-CLI's internal bypass.
+# Without an explicit user context, WP-CLI has no logged-in user, the
+# capability check fails, and wpDiscuz wp_die()s with its own hardcoded
+# "Permission Denied !!!" message instead of a normal WP-CLI error.
+wp plugin activate wpdiscuz --allow-root --user=admin
 
 echo "[*] Setting a couple of benign posts for realistic traffic noise..."
 wp post create --allow-root \
@@ -49,10 +64,13 @@ wp post create --allow-root \
 
 echo "[*] Verifying wpDiscuz upload endpoint responds..."
 curl -s -o /dev/null -w "wp-json/wpdiscuz endpoint HTTP status: %{http_code}\n" \
-  "http://172.28.0.10:8080/wp-json/wpdiscuz/v1/uploadFile" || true
+  "${INTERNAL_URL}/wp-json/wpdiscuz/v1/uploadFile" || true
 
 echo "[*] Provisioning complete."
-echo "    URL:   http://localhost:8080  (or http://172.28.0.10 inside stacka-net)"
+echo "    Internal URL (attacker script, sensors, benign traffic): ${INTERNAL_URL}"
+echo "    Host browser access:                                    http://localhost:8080"
 echo "    Admin: admin / Welcome2024!"
 echo "    Note:  This password is intentionally weak. It is the target of"
 echo "           the T1110.001 brute-force step. Do not reuse it anywhere real."
+echo "    Note:  Host browser access via :8080 will 301-redirect to the"
+echo "           internal URL — that's expected, browsers follow it fine."
