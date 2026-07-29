@@ -4,3 +4,8 @@ desktop.ini
 
 # Obsidian Files
 .obsidian/
+
+# Added zip ignore and log files
+wpdiscuz-7.0.4.zip
+*.log
+.env
