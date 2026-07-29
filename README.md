@@ -17,7 +17,7 @@ This is the first in a planned series of workshops focused on making practical s
 - **Platform-Agnostic:** Browser-based delivery means any laptop, and any OS can be used.
 
 ## Architecture
-**Stack A - Log Generation Lab:** Runs in a controlled environment to produce realistic logs. Includes a vulnerable WordPress target, Suricata and Zeek sensors, MITRE Caldera as the attacker, and benign traffic simulator.
+**Stack A - Log Generation Lab:** Runs in a controlled environment to produce realistic logs. Includes a vulnerable WordPress target, a standalone attacker script driving the full kill chain, Suricata and Zeek sensors, and a benign traffic simulator.
 
 **Stack B - Workshop Delivery:** Hosted in the cloud during the workshop. Provides browser-based terminal access (ttyd) for each attendee, with nginx reverse proxy and Cloudflare Tunnel for authentication and secure delivery.
 
@@ -38,7 +38,7 @@ These may appear in future workshops.
 ```
 bsides-workshop-1/
 ├── stack-a/                    # Log generation lab
-│   ├── caldera/                # Adversary profiles, custom abilities
+│   ├── attacker-script/        # Attack script
 │   ├── target/                 # Vulnerable WordPress compose
 │   ├── sensors/                # Suricata, Zeek configs
 │   ├── benign-traffic/         # Legitimate user simulator
