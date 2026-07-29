@@ -1,0 +1,69 @@
+version: "3.8"
+
+# Stack A — Vulnerable WordPress Target
+# Run this INSIDE the stackant VM (Ubuntu 22.04 Server, VMware Workstation Pro).
+# Promiscuous mode on the VMnet is required once Suricata/Zeek (stack-a/sensors/)
+# are added — WSL2 does not support this, hence stackant.
+
+networks:
+  stacka-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/24
+
+services:
+
+  db:
+    image: mysql:5.7
+    container_name: stacka-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword_lab_only
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress_lab_only
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      stacka-net:
+        ipv4_address: 172.28.0.11
+
+  wordpress:
+    image: wordpress:5.4-php7.4-apache
+    container_name: stacka-wordpress
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress_lab_only
+    ports:
+      - "8080:80"          # host access for provisioning / manual poking
+    volumes:
+      - wp_data:/var/www/html
+    networks:
+      stacka-net:
+        ipv4_address: 172.28.0.10
+
+  wp-cli:
+    image: wordpress:cli-2.7-php7.4
+    container_name: stacka-wpcli
+    depends_on:
+      - wordpress
+      - db
+    user: "33:33"          # www-data, matches the wordpress container
+    volumes:
+      - wp_data:/var/www/html
+      - ./provision-wordpress.sh:/provision-wordpress.sh:ro
+      - ./wpdiscuz-7.0.4.zip:/tmp/wpdiscuz-7.0.4.zip:ro
+    entrypoint: ["bash", "/provision-wordpress.sh"]
+    networks:
+      stacka-net:
+        ipv4_address: 172.28.0.12
+
+volumes:
+  db_data:
+  wp_data:
