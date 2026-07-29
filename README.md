@@ -93,3 +93,19 @@ I'm documenting this project publicly on Substack as a series. Other workshop or
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for details. Workshop content and code are free to use, adapt, and redeploy for your own workshop. Attribution appreciated but not required.
+
+## A Note on AI Assistance
+
+Significant parts of this repo, including infrastructure code, provisioning 
+scripts, documentation, and some of the Substack drafting, were built with 
+AI assistance.
+
+That doesn't mean everything here is AI-generated or unreviewed. Architecture 
+decisions, testing, debugging, and the actual workshop content and delivery 
+are mine.
+
+There's an old IBM training line: *"A computer can never be held accountable, 
+therefore a computer must never make a management decision."* Same principle 
+here: the AI wrote some of this, but it doesn't get to be responsible for 
+any of it. If something's wrong, that's on me for not catching it. A poor 
+craftsman blames his tools.
