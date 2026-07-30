@@ -56,12 +56,31 @@ services:
     user: "33:33"          # www-data, matches the wordpress container
     volumes:
       - wp_data:/var/www/html
+    networks:
+      stacka-net:
+        ipv4_address: 172.28.0.12
+    # No entrypoint override here — this service is for ad-hoc commands, e.g.:
+    #   docker compose run --rm wp-cli wp plugin list --allow-root
+    # Uses the image's own default entrypoint, which passes through whatever
+    # `wp ...` command you give it.
+
+  provision:
+    image: wordpress:cli-2.7-php7.4
+    container_name: stacka-provision
+    depends_on:
+      - wordpress
+      - db
+    user: "33:33"
+    volumes:
+      - wp_data:/var/www/html
       - ./provision-wordpress.sh:/provision-wordpress.sh:ro
       - ./wpdiscuz-7.0.4.zip:/tmp/wpdiscuz-7.0.4.zip:ro
     entrypoint: ["bash", "/provision-wordpress.sh"]
     networks:
       stacka-net:
-        ipv4_address: 172.28.0.12
+        ipv4_address: 172.28.0.13
+    # This service ONLY runs the full provisioning script. Invoke with:
+    #   docker compose run --rm provision
 
 volumes:
   db_data:

@@ -54,17 +54,31 @@ fi
 # "Permission Denied !!!" message instead of a normal WP-CLI error.
 wp plugin activate wpdiscuz --allow-root --user=admin
 
-echo "[*] Setting a couple of benign posts for realistic traffic noise..."
-wp post create --allow-root \
-  --post_type=post \
-  --post_status=publish \
-  --post_title="Welcome to Prairie Wares" \
-  --post_content="We sell handmade prairie goods. Come see our new fall lineup." \
-  2>/dev/null || true
+echo "[*] Setting pretty permalinks (required for REST API pretty-paths)..."
+wp rewrite structure '/%postname%/' --allow-root
+wp rewrite flush --hard --allow-root
 
-echo "[*] Verifying wpDiscuz upload endpoint responds..."
-curl -s -o /dev/null -w "wp-json/wpdiscuz endpoint HTTP status: %{http_code}\n" \
-  "${INTERNAL_URL}/wp-json/wpdiscuz/v1/uploadFile" || true
+echo "[*] Enabling wpDiscuz file uploads (wmuIsEnabled)..."
+wp db query \
+  "INSERT INTO wp_options (option_name, option_value, autoload)
+   VALUES ('wpdiscuz_options', 'a:1:{s:7:\"content\";a:1:{s:12:\"wmuIsEnabled\";i:1;}}', 'yes')
+   ON DUPLICATE KEY UPDATE
+   option_value = 'a:1:{s:7:\"content\";a:1:{s:12:\"wmuIsEnabled\";i:1;}}';" \
+  --allow-root
+
+echo "[*] Creating sample post if not already present..."
+if ! wp post list --post_status=publish --fields=post_title --format=csv --allow-root 2>/dev/null | grep -q "Welcome to Prairie Wares"; then
+  wp post create --allow-root \
+    --post_type=post \
+    --post_status=publish \
+    --post_title="Welcome to Prairie Wares" \
+    --post_content="We sell handmade prairie goods. Come see our new fall lineup."
+fi
+
+curl -s -o /dev/null -w "wpDiscuz upload nonce present: " \
+  "${INTERNAL_URL}/hello-world/"
+curl -s "${INTERNAL_URL}/hello-world/" | grep -c "wmuSecurity" | \
+  xargs -I{} bash -c '[ "{}" -gt "0" ] && echo "YES" || echo "NO"'
 
 echo "[*] Provisioning complete."
 echo "    Internal URL (attacker script, sensors, benign traffic): ${INTERNAL_URL}"

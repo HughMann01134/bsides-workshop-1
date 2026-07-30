@@ -17,7 +17,7 @@ echo "[*] Waiting for services to settle..."
 sleep 15
 
 echo "[*] Re-provisioning (WordPress core + wpDiscuz 7.0.4)..."
-docker compose run --rm wp-cli
+docker compose run --rm provision
 
 echo "[*] Reset complete. Target is at a clean, freshly-provisioned state."
 echo "    Apache logs, wp_content/uploads, and the database have all been"
